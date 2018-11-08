@@ -1,7 +1,10 @@
 #!/usr/bin/env python2
 
+import sys
+import os
 import paho.mqtt.client as mqtt
 import time
+from time import localtime, strftime
 import Adafruit_DHT
 from configparser import ConfigParser
 import json
@@ -20,7 +23,7 @@ elif sensor_type == 'am2302':
 else:
     raise Exception('Supported sensor types: DHT22, DHT11, AM2302')
 
-pin = config['sensor'].get('pin', 10)
+pin = config['sensor'].get('pin', 7)
 topic = config['mqtt'].get('topic', 'temperature/dht22')
 decim_digits = config['sensor'].getint('decimal_digits', 2)
 sleep_time = config['sensor'].getint('interval', 60)
@@ -32,7 +35,7 @@ def on_connect(client, userdata, flags, rc):
 
 client = mqtt.Client()
 client.on_connect = on_connect
-client.connect(config['mqtt'].get('hostname', 'homeassistant'),
+client.connect(config['mqtt'].get('hostname', 'Jeedom'),
                config['mqtt'].getint('port', 1883),
                config['mqtt'].getint('timeout', 60))
 client.loop_start()
